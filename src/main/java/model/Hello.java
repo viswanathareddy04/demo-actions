@@ -1,7 +1,6 @@
 package model;
+import lombok.Data;
 
-import jdk.jfr.DataAmount;
-
-@DataAmount
+@Data
 public class Hello {
 }
