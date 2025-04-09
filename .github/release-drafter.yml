@@ -1,0 +1,30 @@
+template: |
+  ## Release: $RESOLVED_VERSION
+
+  ### What's Changed
+
+  $CHANGES
+
+  ### Contributors
+
+  $CONTRIBUTORS
+
+version-resolver:
+  type: file
+  file: 'src/main/resources/Remittance.yaml'
+  property: info.version
+
+categories:
+  - title: New Features
+    labels: [feature]
+  - title: Bug Fixes
+    labels: [bug]
+  - title: Maintenance
+    labels: [chore]
+  - title: Documentation
+    labels: [docs]
+  - title: Dependencies
+    labels: [dependencies]
+
+exclude-labels:
+  - skip-changelog

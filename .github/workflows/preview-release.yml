@@ -1,0 +1,20 @@
+name: Draft Preview Release for Feature Branches
+
+on:
+  push:
+    branches:
+      - 'master'
+
+jobs:
+  draft_preview:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - uses: release-drafter/release-drafter@v6
+        with:
+          config-name: release-preview.yml
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
