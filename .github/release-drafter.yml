@@ -11,7 +11,7 @@ template: |
 
 version-resolver:
   type: file
-  file: 'src/main/resources/Remittance.yaml'
+  file: 'src/main/resources/contract.yaml'
   property: info.version
 
 categories:
