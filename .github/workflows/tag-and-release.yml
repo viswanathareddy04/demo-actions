@@ -1,0 +1,38 @@
+name: Release on Tag
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Java (for Gradle projects)
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Parse version from build.gradle
+        id: version
+        run: |
+          VERSION=$(grep '^version' build.gradle | sed "s/version\s*=\s*['\"]//;s/['\"]//g")
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Run Release Drafter
+        uses: release-drafter/release-drafter@v6
+        with:
+          config-name: release-drafter.yml
+          tag: v${{ steps.version.outputs.VERSION }}
+          name: v${{ steps.version.outputs.VERSION }}
+          version: ${{ steps.version.outputs.VERSION }}
+          token: ${{ secrets.GITHUB_TOKEN }}
