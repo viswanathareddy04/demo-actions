@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'org.example'
-version = '1.2.3'
+version = '1.2.4'
 
 java {
     toolchain {
@@ -30,6 +30,12 @@ tasks.named('test') {
 }
 
 jar {
+    enabled = false
+}
+
+bootJar {
+    archiveBaseName.set("demo-actions")
+    enabled = true
     manifest {
         attributes(
                 'Implementation-Title': project.name,
@@ -37,4 +43,3 @@ jar {
         )
     }
 }
-
