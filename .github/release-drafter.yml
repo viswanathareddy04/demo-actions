@@ -1,5 +1,16 @@
-name-template: 'v$NEXT_PATCH_VERSION'
-tag-template: 'v$NEXT_PATCH_VERSION'
+template: |
+  ## Preview Release: $RESOLVED_VERSION
+
+  ### What's Changed
+
+  $CHANGES
+
+  ### Contributors
+
+  $CONTRIBUTORS
+
+version-resolver:
+  type: git
 
 categories:
   - title: ✨ New Features
@@ -15,14 +26,3 @@ categories:
 
 exclude-labels:
   - skip-changelog
-
-change-template: '- $TITLE (#$NUMBER) @$AUTHOR'
-
-template: |
-  ## Release: $RESOLVED_VERSION
-
-  ### What's Changed
-  $CHANGES
-
-  ### Contributors
-  $CONTRIBUTORS
