@@ -28,6 +28,15 @@ jobs:
           VERSION=$(grep '^version' build.gradle | sed "s/version\s*=\s*['\"]//;s/['\"]//g")
           echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
 
+      - name: Upload JAR to GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ github.ref_name }}
+          files: build/libs/*-${{ steps.get_version.outputs.VERSION }}.jar
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+
       - name: Run Release Drafter
         uses: release-drafter/release-drafter@v6
         with:
