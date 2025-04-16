@@ -35,13 +35,3 @@ jobs:
           files: build/libs/*-${{ steps.get_version.outputs.VERSION }}.jar
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-
-      - name: Run Release Drafter
-        uses: release-drafter/release-drafter@v6
-        with:
-          config-name: release-drafter.yml
-          tag: v${{ steps.version.outputs.VERSION }}
-          name: v${{ steps.version.outputs.VERSION }}
-          version: ${{ steps.version.outputs.VERSION }}
-          token: ${{ secrets.GITHUB_TOKEN }}
