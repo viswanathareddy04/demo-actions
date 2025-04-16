@@ -71,10 +71,7 @@ jobs:
         id: notes
         uses: release-drafter/release-drafter@v6
         with:
-          config-name: release-drafter.yml
-          tag: v${{ steps.meta.outputs.VERSION }}
-          name: v${{ steps.meta.outputs.VERSION }}
-          version: ${{ steps.meta.outputs.VERSION }}
+          config-name: release-preview.yml
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

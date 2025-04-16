@@ -12,6 +12,10 @@ template: |
 version-resolver:
   type: git
 
+branches:
+  - master
+
+
 categories:
   - title: New Features
     labels: [feature]
