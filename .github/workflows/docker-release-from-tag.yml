@@ -1,7 +1,7 @@
 # ============================================
 # Workflow: docker-release-from-tag.yml
 # Purpose: Build Docker image and JAR from a Git tag using version in build.gradle
-# Publishes Docker image: <artifactId>:<version>-<shortSHA>-build-<run_number>
+# Publishes Docker image: reddy1990/demo-actions:<version>-<shortSHA>-build-<run_number>
 # Uploads JAR as GitHub release asset
 # Also generates release notes including merged PRs
 # ============================================
@@ -34,28 +34,23 @@ jobs:
       - name: Grant execute permissions to Gradle wrapper
         run: chmod +x ./gradlew
 
-      - name: Extract version and artifact name from build.gradle
+      - name: Extract version and metadata from build.gradle
         id: meta
         run: |
           VERSION=$(grep '^version' build.gradle | sed "s/version\s*=\s*['\"]//;s/['\"]//g")
-          ARTIFACT=$(grep '^rootProject.name' settings.gradle | sed "s/rootProject.name\s*=\s*['\"]//;s/['\"]//g")
           SHORT_SHA=$(git rev-parse --short HEAD)
           BUILD_NUM=${{ github.run_number }}
 
           echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
-          echo "ARTIFACT=$ARTIFACT" >> $GITHUB_OUTPUT
           echo "SHORT_SHA=$SHORT_SHA" >> $GITHUB_OUTPUT
           echo "BUILD_NUM=$BUILD_NUM" >> $GITHUB_OUTPUT
 
       - name: Build JAR
         run: ./gradlew clean bootJar
 
-      - name: List files in build/libs
-        run: ls -l build/libs
-
       - name: Build Docker image
         run: |
-          docker build -t ${{ steps.meta.outputs.ARTIFACT }}:${{ steps.meta.outputs.VERSION }}-${{ steps.meta.outputs.SHORT_SHA }}-build-${{ steps.meta.outputs.BUILD_NUM }} .
+          docker build -t demo-actions:${{ steps.meta.outputs.VERSION }}-${{ steps.meta.outputs.SHORT_SHA }}-build-${{ steps.meta.outputs.BUILD_NUM }} .
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
@@ -65,9 +60,9 @@ jobs:
 
       - name: Push Docker image to Docker Hub
         run: |
-          docker tag ${{ steps.meta.outputs.ARTIFACT }}:${{ steps.meta.outputs.VERSION }}-${{ steps.meta.outputs.SHORT_SHA }}-build-${{ steps.meta.outputs.BUILD_NUM }} \
-            ${{ secrets.DOCKERHUB_USERNAME }}/${{ steps.meta.outputs.ARTIFACT }}:${{ steps.meta.outputs.VERSION }}-${{ steps.meta.outputs.SHORT_SHA }}-build-${{ steps.meta.outputs.BUILD_NUM }}
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ steps.meta.outputs.ARTIFACT }}:${{ steps.meta.outputs.VERSION }}-${{ steps.meta.outputs.SHORT_SHA }}-build-${{ steps.meta.outputs.BUILD_NUM }}
+          docker tag demo-actions:${{ steps.meta.outputs.VERSION }}-${{ steps.meta.outputs.SHORT_SHA }}-build-${{ steps.meta.outputs.BUILD_NUM }} \
+            reddy1990/demo-actions:${{ steps.meta.outputs.VERSION }}-${{ steps.meta.outputs.SHORT_SHA }}-build-${{ steps.meta.outputs.BUILD_NUM }}
+          docker push reddy1990/demo-actions:${{ steps.meta.outputs.VERSION }}-${{ steps.meta.outputs.SHORT_SHA }}-build-${{ steps.meta.outputs.BUILD_NUM }}
 
       - name: Generate release notes
         id: notes
