@@ -28,6 +28,9 @@ jobs:
       - name: Build the JAR
         run: ./gradlew clean build
 
+      - name: List files in build/libs
+        run: ls -l build/libs
+
       - name: Parse version from build.gradle
         id: version
         run: |
