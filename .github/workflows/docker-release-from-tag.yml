@@ -67,10 +67,11 @@ jobs:
             reddy1990/demo-actions:${{ steps.meta.outputs.VERSION }}-${{ steps.meta.outputs.SHORT_SHA }}-build-${{ steps.meta.outputs.BUILD_NUM }}
           docker push reddy1990/demo-actions:${{ steps.meta.outputs.VERSION }}-${{ steps.meta.outputs.SHORT_SHA }}-build-${{ steps.meta.outputs.BUILD_NUM }}
 
-      - name: Get previous tag
+      - name: Get previous tag (safe fallback)
         id: prevtag
         run: |
-          TAG=$(git describe --tags --abbrev=0 HEAD^)
+          TAG=$(git tag --sort=-creatordate | grep -v "^v${{ steps.meta.outputs.VERSION }}$" | head -n 1)
+          echo "Previous tag detected: $TAG"
           echo "PREV_TAG=$TAG" >> $GITHUB_OUTPUT
 
       - name: 'Build Changelog'
@@ -78,6 +79,8 @@ jobs:
         uses: mikepenz/release-changelog-builder-action@v4
         with:
             token: '${{ github.token }}'
+            fromTag: ${{ steps.prevtag.outputs.PREV_TAG }}
+            toTag: v${{ steps.meta.outputs.VERSION }}
 
       - name: Create GitHub Release with notes and JAR
         uses: softprops/action-gh-release@v1
