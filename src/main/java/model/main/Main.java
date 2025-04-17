@@ -40,10 +40,10 @@ public class Main
             {
                 num = scanner.nextFloat();
                 validInput = true;
-            } catch ( e)
+            } catch (InputMismatchException e)
             {
                 System.out.println(
-                        "Invalid input. Please enter a valid number."
+                        "Invalid input. Please enter a valid number. fgdhd"
                 );
                 scanner.next();
             }
